@@ -6,3 +6,5 @@
  * Time: 11:27
  */
 print_r($_POST);
+
+include "connect.php";

@@ -36,6 +36,40 @@
         <button type="submit" id="btn" class="btn btn-primary">Submit</button>
     </form>
 </div>
+
+<div class="poisk">
+    <form action="" name="poisk" method="POST">
+        <input type="text" name="s" id="s">
+        <input type="submit" name="btn" id="btn" value="Найти">
+    </form>
+    <?php
+    include "connect.php";
+    $pdo->exec("set names utf8");
+    if ( 3<=strlen($_POST['s'] ) ){
+        $name = trim($_POST['s']);
+        $name = "%$name%";
+        $stm  = $pdo->prepare("SELECT posts.title as 'title',comments.body as 'body' FROM posts,comments WHERE posts.id=comments.postId AND comments.body LIKE ?");
+        $stm->execute(array($name));
+        $data_arr = $stm->fetchAll();
+
+    }
+    ?>
+    <table>
+        <tr>
+            <td>Заголовок записи</td>
+            <td>Комментарии</td>
+        </tr>
+        <?php if (!empty($data_arr )){?>
+            <?php foreach ($data_arr as $value) {?>
+                <tr>
+                    <td><?php echo $value['title'];?></td>
+                    <td><?php echo $value['body'];?></td>
+                </tr>
+            <?php } ?>
+        <?php } ?>
+        <tr>
+    </table>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="script.js"></script>
